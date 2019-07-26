@@ -247,7 +247,7 @@ $(function() {
       width = 127;
       frequency = Math.PI * 2 / 20;
       this.index += 1;
-      console.log(this.index);
+      // console.log(this.index);
       red = Math.sin(frequency * this.index + 2 + phase) * width + center;
       green = Math.sin(frequency * this.index + 0 + phase) * width + center;
       blue = Math.sin(frequency * this.index + 4 + phase) * width + center;

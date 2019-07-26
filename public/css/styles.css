@@ -60,6 +60,7 @@ body {
 canvas {
   display: block;
   margin: auto;
+  border: 10px solid #3c6382;
 }
 
 #lobby-wrapper {
