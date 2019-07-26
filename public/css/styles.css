@@ -1,0 +1,111 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+}
+
+.title {
+  text-align: center;
+}
+
+#login-wrapper {
+  height: 100%;
+}
+
+.login-container {
+  text-align: center;
+}
+
+.login-form {
+}
+
+#game-wrapper {
+}
+
+.game-container {
+  display: none;
+  margin: 15px;
+  padding: 15px;
+}
+
+canvas {
+  display: block;
+  margin: auto;
+}
+
+#lobby-wrapper {
+}
+
+.lobby-container {
+  display: none;
+  margin: 15px;
+  padding: 15px;
+}
+
+.lobby-title {
+  text-align: center;
+}
+
+.player-list {
+  text-align: center;
+}
+
+.player-item {
+}
+
+.player-name {
+}
+
+.player-actions {
+}
+
+.lobby-container ul {
+  list-style: none;
+}
+
+#chat-wrapper {
+}
+
+.chat-container {
+  display: none;
+  margin: 15px;
+  padding: 15px;
+}
+
+.chat-title {
+  text-align: center;
+}
+
+.chat-messages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-message {
+}
+
+.chat-form {
+}
+
+.message-box {
+}
+
+.message-send {
+}
