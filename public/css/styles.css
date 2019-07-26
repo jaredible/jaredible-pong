@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Bitmap';
+  src: url('/font/bitmap.ttf') format('truetype');
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,6 +14,13 @@ html, body {
   height: 100%;
 }
 
+body {
+  font-family: 'Bitmap';
+  color: #ddd;
+  background-color: #0a3d62;
+  border: 5px solid #60a3bc;
+}
+
 #wrapper {
   width: 100%;
   height: 100%;
@@ -18,6 +30,7 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 15px;
+  border: 10px solid #3c6382;
 }
 
 .title {
