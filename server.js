@@ -11,7 +11,6 @@ const ENV = app.get('env');
 
 app.set('view engine', 'pug');
 app.use(express.static('public'));
-app.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/socket.io', express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
 
 app.get('/', (req, res) => {

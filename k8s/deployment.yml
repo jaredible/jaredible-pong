@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: node-pong-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: node-pong
+    spec:
+      containers:
+        - name: node-pong
+        image: jaredible/node-pong
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
