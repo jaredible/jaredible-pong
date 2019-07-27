@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: node-pong-deployment
@@ -10,8 +10,8 @@ spec:
         app: node-pong
     spec:
       containers:
-        - name: node-pong
+      - name: node-pong
         image: jaredible/node-pong
         imagePullPolicy: Always
         ports:
-          - containerPort: 3000
+        - containerPort: 3000
