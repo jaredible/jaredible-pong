@@ -94,7 +94,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem - 38px - 5px) !important;
   background-color: #3c6382;
-  box-shadow: 0 0 10px 0 rgba(60, 99, 130, 0.75);
+  box-shadow: 0 0 10px 10px rgba(60, 99, 130, 0.75);
 }
 
 #wrapper2 {
@@ -102,7 +102,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem);
   background-color: #3c6382;
-  box-shadow: 0 0 10px 0 rgba(60, 99, 130, 0.75);
+  box-shadow: 0 0 10px 10px rgba(60, 99, 130, 0.75);
 }
 
 #wrapper3 {
@@ -110,7 +110,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem) !important;
   background-color: #3c6382;
-  box-shadow: 0 0 10px 0 rgba(60, 99, 130, 0.75);
+  box-shadow: 0 0 10px 10px rgba(60, 99, 130, 0.75);
 }
 
 .list-group {
