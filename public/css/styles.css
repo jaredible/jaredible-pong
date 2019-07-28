@@ -20,6 +20,17 @@ body {
   border: 5px solid #3c6382;
 }
 
+body {
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  box-shadow: 0 0 10px 0 #3c6382;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
 h1 {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.75);
 }
