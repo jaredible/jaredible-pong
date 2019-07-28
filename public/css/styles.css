@@ -75,7 +75,14 @@ body {
 
 .list-group {
   max-height: 600px;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.list-group::-webkit-scrollbar {
+  display: none;
 }
 
 .form-control {
