@@ -70,11 +70,11 @@ body {
 }
 
 .test {
-  max-height: calc(700px - 38px) !important;
+  max-height: calc(100% - 48px - 15px - .5rem - 38px) !important;
 }
 
 .list-group {
-  max-height: 600px;
+  max-height: calc(100% - 48px - 15px - .5rem);
   overflow-x: hidden;
   overflow-y: scroll;
   -ms-overflow-style: none;
