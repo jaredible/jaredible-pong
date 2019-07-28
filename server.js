@@ -54,9 +54,16 @@ io.on('connection', (socket) => {
 
   socket.on('lobby-chat', (message) => {
     var today = new Date();
+    var month = today.getMonth() + 1;
+    var day = today.getDate();
+    var hour = today.getHours();
+    var minute = today.getMinutes();
+    var hourFormatted = hour % 12 || 12;
+    var minuteFormatted = minute < 10 ? '0' + minute : minute;
+    var morning = hour < 12 ? 'AM' : 'PM';
     var message = {
       username: socket.username,
-      time: today.getHours() + ":" + today.getMinutes(),
+      time: hourFormatted + ':' + minuteFormatted + ' ' + morning + ' ' + month + '/' + day,
       message: message
     };
     messages.push(message);

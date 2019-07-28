@@ -8,6 +8,7 @@ html
     link(rel='stylesheet', text='text/css', href='/css/animate.css')
     link(rel='stylesheet', text='text/css', href='/css/styles.css')
   body
+    button.position-fixed.btn.btn-lg.btn-secondary.thetest Test
     .testing.animated
     #myModal.modal.animated.bounceInDown
       .modal-dialog.modal-dialog-centered
@@ -15,14 +16,14 @@ html
           .modal-body
             #login.h-100.m-auto
               .input-group.input-group-lg
-                input(id='username', class='form-control', type='text', placeholder='Username', autofocus)
+                input(id='username', class='form-control', type='text', placeholder='', autofocus)
                 .input-group-append
                   button#login-btn.btn.btn-primary Login
     .container-fluid.h-100.pt-3.pb-3.animated.blur
       .row.h-100
         #chat.col-md-4
-          h1.text-center.text-white Chat
-          #wrapper
+          h1.text-center.text-white.animated#title1 Chat
+          #wrapper1.animated
             ul.list-group.test3
               each message in messages
                 li.list-group-item.align-items-start.animated
@@ -30,15 +31,15 @@ html
                     h5.mb-1= message.username
                     small.text-muted= message.time
                   p.mb-1= message.message
-          #chat-form
+          #chat-form.animated
             .input-group
               input(id='chat-box', class='form-control', type='text', placeholder='Message')
               .input-group-append
                 button#chat-btn.btn.btn-success Send
         #players.col-md-4.text-white
-          h1.text-center Players
-          #wrapper2
-            ul.list-group.test#test
+          h1.text-center.text-white.animated#title2 Players
+          #wrapper2.animated
+            ul.list-group#test
               each player in players
                 li.list-group-item.p-0
                   .input-group
@@ -49,10 +50,10 @@ html
                       button.btn.btn-success Invite
                     .input-group-append
                       button.btn.btn-primary Join
-        #games.col-md-4.text-white
-          h1.text-center Games
+        #games.col-md-4.text-white.animated
+          h1.text-center.text-white.animated#title3 Games
           - var n = 0
-          #wrapper2
+          #wrapper3.animated
             ul.list-group
               while n++ < 36
                 li.list-group-item.p-0

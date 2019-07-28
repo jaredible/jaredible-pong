@@ -1,6 +1,19 @@
 $(function() {
   var socket = io.connect();
 
+  var i = 0;
+  var text = "Username";
+  var speed = 50;
+  function test() {
+    if (i < text.length) {
+      $("#username").attr("placeholder", $("#username").attr("placeholder") + text.charAt(i++));
+      setTimeout(test, speed);
+    }
+  }
+  setTimeout(function() {
+    test();
+  }, 1000);
+
   socket.on("player-disconnect", function(username) {
     console.log(username + " disconnected");
   });
@@ -77,6 +90,12 @@ $(function() {
       socket.emit("lobby-chat", $("#chat-box").val());
       $("#chat-box").val("");
       // $("#chat-box").focus();
+    } else {
+      $("#chat-box").focus();
+      $("#chat-form").addClass("shake");
+      setTimeout(function() {
+        $("#chat-form").removeClass("shake");
+      }, 1000);
     }
   });
 
@@ -87,7 +106,65 @@ $(function() {
       if (message !== "") {
         socket.emit("lobby-chat", $("#chat-box").val());
         $("#chat-box").val("");
+      } else {
+        $("#chat-form").addClass("shake");
+        setTimeout(function() {
+          $("#chat-form").removeClass("shake");
+        }, 1000);
       }
     }
+  });
+
+  $(".thetest").click(function() {
+    var chat = $("#wrapper1");
+    var players = $("#wrapper2");
+    var games = $("#wrapper3");
+    games.addClass("zoomOutRight").addClass("faster");
+    chat.addClass("zoomOutLeft").addClass("faster");
+    players.addClass("zoomOut").addClass("faster");
+    $("#title1").addClass("zoomOutUp").addClass("faster");
+    $("#title2").addClass("zoomOutUp").addClass("faster");
+    $("#title3").addClass("zoomOutUp").addClass("faster");
+    $("#chat-form").addClass("zoomOutDown").addClass("faster");
+    setTimeout(function() {
+      $("#games").removeClass("col-md-4").addClass("col-md-3");
+      games.removeClass("zoomOutRight").addClass("zoomInRight");
+      setTimeout(function() {
+        games.removeClass("zoomInRight").removeClass("faster");
+      }, 1000);
+      $("#chat").removeClass("col-md-4").addClass("col-md-3");
+      chat.removeClass("zoomOutLeft").addClass("zoomInLeft");
+      setTimeout(function() {
+        chat.removeClass("zoomInLeft").removeClass("faster");
+      }, 1000);
+      $("#players").removeClass("col-md-4").addClass("col-md-3");
+      players.removeClass("zoomOut").addClass("zoomIn");
+      setTimeout(function() {
+        players.removeClass("zoomIn").removeClass("faster");
+      }, 1000);
+      $("#chat-form").removeClass("zoomOutDown").addClass("zoomInDown");
+      setTimeout(function() {
+        $("#chat-form").removeClass("zoomInDown").removeClass("faster");
+      }, 1000);
+      $("#players").removeClass("col-md-4").addClass("col-md-6");
+      $("#wrapper2").html("");
+
+      // titles
+      $("#title1").removeClass("zoomOutUp").addClass("zoomInUp");
+      setTimeout(function() {
+        $("#title1").removeClass("zoomInUp").removeClass("faster");
+      }, 1000);
+      $("#title2").removeClass("zoomOutUp").addClass("zoomInUp");
+      $("#title2").text("Game");
+      setTimeout(function() {
+        $("#title2").removeClass("zoomInUp").removeClass("faster");
+      }, 1000);
+      $("#title3").removeClass("zoomOutUp").addClass("zoomInUp");
+      $("#title3").text("Perks");
+      $("#wrapper3").html("");
+      setTimeout(function() {
+        $("#title3").removeClass("zoomInUp").removeClass("faster");
+      }, 1000);
+    }, 1000);
   });
 });
