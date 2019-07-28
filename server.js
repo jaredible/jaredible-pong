@@ -17,11 +17,35 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/lobby', (req, res) => {
+  res.render('lobby');
+});
+
+app.get('/game', (req, res) => {
+  res.render('game');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
 var connections = [];
+var players = [];
 
 io.on('connection', (socket) => {
   console.log('Connection established...', socket.id);
   connections.push(socket);
+
+  socket.on('login', (username) => {
+    console.log(username);
+    var player = {
+      id: socket.id,
+      username: username
+    };
+    players.push(player);
+    console.log(players);
+    socket.broadcast.emit('login', username);
+  });
 
   socket.on('message-global', (data) => {
     console.log(data);

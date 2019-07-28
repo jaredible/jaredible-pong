@@ -16,21 +16,8 @@ html, body {
 
 body {
   font-family: 'Bitmap';
-  color: #ddd;
   background-color: #0a3d62;
-  border: 5px solid #60a3bc;
-}
-
-#wrapper {
-  width: 100%;
-  height: 100%;
-}
-
-.container {
-  width: 100%;
-  height: 100%;
-  padding: 15px;
-  border: 10px solid #3c6382;
+  border: 5px solid #3c6382;
 }
 
 .title {
@@ -41,6 +28,71 @@ body {
   height: 100%;
 }
 
+#test1 {
+  position: absolute;
+  padding-right: 15px;
+  top: 15px;
+}
+
+#test2 {
+  position: absolute;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  right: 0;
+  bottom: 15px;
+}
+
+.col-md-4 {
+  height: 100%;
+}
+
+.blur {
+  filter: blur(2px);
+}
+
+.testing {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 10000;
+  filter: none;
+}
+
+.test {
+  max-height: calc(700px - 38px) !important;
+}
+
+.list-group {
+  max-height: 600px;
+  overflow: scroll;
+}
+
+.form-control {
+  border-width: 0;
+  border-radius: 0 !important;
+}
+
+.btn {
+  border-width: 0;
+  border-radius: 0 !important;
+}
+
+.list-group-item {
+  /* border-width: 0; */
+  border-radius: 0 !important;
+}
+
 .login-container {
   text-align: center;
 }
@@ -49,6 +101,32 @@ body {
 }
 
 #game-wrapper {
+}
+
+#login {
+  max-width: 330px;
+}
+
+.btn-primary {
+  background-color: #2980b9
+}
+
+.btn-danger {
+  background-color: #c0392b;
+}
+
+.status {
+  color: #ccc;
+  margin: auto 5px;
+  padding: 2px;
+}
+
+.online {
+  color: #2ecc71;
+}
+
+.offline {
+  color: #f39c12;
 }
 
 .game-container {

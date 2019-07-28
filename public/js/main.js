@@ -1,6 +1,28 @@
 $(function() {
   var socket = io.connect();
 
+  $("#myModal").show();
+
+  var login = $("#login");
+
+  login.submit(function(e) {
+    e.preventDefault();
+    socket.emit("login", $("#username").val());
+    $("#username").val("");
+    $("#myModal").hide();
+    $(".testing").hide();
+    $(".container-fluid").removeClass("blur");
+    return false;
+  });
+
+  $("ul").scrollTop($("ul").height());
+
+  socket.on("login", function(username) {
+    var item = $("#test");
+    item.append($("<li>").append($("<div>").append($("<div>").addClass("form-control").text(username)).addClass("input-group")).addClass("list-group-item").addClass("p-0"));
+    console.log(data);
+  });
+
   socket.on("message-global", function(data) {
     $(".chat-messages").append($("<li>").text(data));
     console.log(data);

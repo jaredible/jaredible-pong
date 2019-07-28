@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Pong - Login
+    link(rel='shortcut icon', href='/favicon.ico')
+    link(rel='stylesheet', text='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css')
+    link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+    link(rel='stylesheet', text='text/css', href='/css/styles.css')
+  body
+    .container-fluid.h-100
+      .row.h-100.justify-content-center.align-items-center
+        .col-12
+          form#login.h-100.m-auto
+            .input-group
+              input(class='form-control', type='text', placeholder='Username')
+              .input-group-append
+                button.btn.btn-primary Login
+    script(src='https://code.jquery.com/jquery-3.4.1.min.js', integrity='sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=', crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js', integrity='sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o', crossorigin='anonymous')
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/main.js')
+    script(src='/js/pong.js')
