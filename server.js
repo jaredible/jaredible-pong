@@ -13,11 +13,13 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use('/socket.io', express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
 
+var players = [];
 var messages = [];
 
 app.get('/', (req, res) => {
   res.render('index', {
-    messages: messages
+    messages: messages,
+    players: players
   });
 });
 
@@ -34,21 +36,18 @@ app.get('/login', (req, res) => {
 });
 
 var connections = [];
-var players = [];
 
 io.on('connection', (socket) => {
   console.log('Connection established...', socket.id);
   connections.push(socket);
 
   socket.on('login', (username) => {
-    console.log(username);
+    socket.username = username;
     var player = {
       id: socket.id,
       username: username
     };
     players.push(player);
-    console.log(players);
-    socket.username = username;
     socket.broadcast.emit('login', username);
   });
 

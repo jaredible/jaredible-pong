@@ -55,7 +55,7 @@ body {
 }
 
 .test {
-  max-height: calc(100% - 48px - 15px - .5rem - 38px) !important;
+  max-height: calc(100% - 48px - 15px - .5rem - 38px - 2px) !important;
 }
 
 .list-group {
@@ -105,7 +105,10 @@ body {
 }
 
 #login {
-  max-width: 330px;
+}
+
+.modal-body {
+  padding: 0;
 }
 
 .btn-primary {

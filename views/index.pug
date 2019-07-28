@@ -13,8 +13,8 @@ html
         .modal-content
           .modal-body
             #login.h-100.m-auto
-              .input-group
-                input(id='username', class='form-control', type='text', placeholder='Username')
+              .input-group.input-group-lg
+                input(id='username', class='form-control', type='text', placeholder='Username', autofocus)
                 .input-group-append
                   button#login-btn.btn.btn-primary Login
     .container-fluid.h-100.pt-3.pb-3.blur
@@ -35,14 +35,13 @@ html
                 button#chat-btn.btn.btn-success Send
         #players.col-md-4.text-white
           h1.text-center Players
-          - var n = 0
           ul.list-group#test
-            while n++ < 3
+            each player in players
               li.list-group-item.p-0
                 .input-group
                   .status
                     i.fa.fa-circle.online
-                  .form-control Jaredible
+                  .form-control= player.username
                   .input-group-append
                     button.btn.btn-success Invite
                   .input-group-append
