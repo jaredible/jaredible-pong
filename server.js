@@ -13,8 +13,10 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use('/socket.io', express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
 
+var connections = [];
 var players = [];
 var messages = [];
+var games = [];
 
 app.get('/', (req, res) => {
   res.render('index', {
@@ -35,8 +37,6 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
-var connections = [];
-
 io.on('connection', (socket) => {
   console.log('Connection established...', socket.id);
   connections.push(socket);
@@ -48,7 +48,8 @@ io.on('connection', (socket) => {
       username: username
     };
     players.push(player);
-    socket.broadcast.emit('login', username);
+    socket.emit('login', username);
+    socket.broadcast.emit('new-player', username);
   });
 
   socket.on('lobby-chat', (message) => {
@@ -66,6 +67,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Connection closed...', socket.id);
     connections.splice(connections.indexOf(socket), 1);
+    socket.broadcast.emit('player-disconnect', socket.username);
   });
 });
 

@@ -4,11 +4,12 @@ html
     title Pong - Lobby
     link(rel='shortcut icon', href='/favicon.ico')
     link(rel='stylesheet', text='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css')
-    link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+    link(rel='stylesheet', text='text/css', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+    link(rel='stylesheet', text='text/css', href='/css/animate.css')
     link(rel='stylesheet', text='text/css', href='/css/styles.css')
   body
-    .testing
-    #myModal.modal
+    .testing.animated
+    #myModal.modal.animated.bounceInDown
       .modal-dialog.modal-dialog-centered
         .modal-content
           .modal-body
@@ -17,17 +18,18 @@ html
                 input(id='username', class='form-control', type='text', placeholder='Username', autofocus)
                 .input-group-append
                   button#login-btn.btn.btn-primary Login
-    .container-fluid.h-100.pt-3.pb-3.blur
+    .container-fluid.h-100.pt-3.pb-3.animated.blur
       .row.h-100
         #chat.col-md-4
           h1.text-center.text-white Chat
-          ul.list-group.test
-            each message in messages
-              li.list-group-item.align-items-start
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1= message.username
-                  small.text-muted= message.time
-                p.mb-1= message.message
+          #wrapper
+            ul.list-group.test3
+              each message in messages
+                li.list-group-item.align-items-start.animated
+                  .d-flex.w-100.justify-content-between
+                    h5.mb-1= message.username
+                    small.text-muted= message.time
+                  p.mb-1= message.message
           #chat-form
             .input-group
               input(id='chat-box', class='form-control', type='text', placeholder='Message')
@@ -35,27 +37,29 @@ html
                 button#chat-btn.btn.btn-success Send
         #players.col-md-4.text-white
           h1.text-center Players
-          ul.list-group#test
-            each player in players
-              li.list-group-item.p-0
-                .input-group
-                  .status
-                    i.fa.fa-circle.online
-                  .form-control= player.username
-                  .input-group-append
-                    button.btn.btn-success Invite
-                  .input-group-append
-                    button.btn.btn-primary Join
+          #wrapper2
+            ul.list-group.test#test
+              each player in players
+                li.list-group-item.p-0
+                  .input-group
+                    .status
+                      i.fa.fa-circle.online
+                    .form-control.pl-0= player.username
+                    .input-group-append
+                      button.btn.btn-success Invite
+                    .input-group-append
+                      button.btn.btn-primary Join
         #games.col-md-4.text-white
           h1.text-center Games
           - var n = 0
-          ul.list-group
-            while n++ < 36
-              li.list-group-item.p-0
-                .input-group
-                  .form-control Jaredible VS Bob
-                  .input-group-append
-                    button.btn.btn-info Spectate
+          #wrapper2
+            ul.list-group
+              while n++ < 36
+                li.list-group-item.p-0
+                  .input-group
+                    .form-control Jaredible VS Bob
+                    .input-group-append
+                      button.btn.btn-info Spectate
     script(src='https://code.jquery.com/jquery-3.4.1.min.js', integrity='sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js', integrity='sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o', crossorigin='anonymous')
     script(src='/socket.io/socket.io.js')
