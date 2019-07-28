@@ -13,8 +13,12 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use('/socket.io', express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
 
+var messages = [];
+
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {
+    messages: messages
+  });
 });
 
 app.get('/lobby', (req, res) => {
@@ -44,15 +48,20 @@ io.on('connection', (socket) => {
     };
     players.push(player);
     console.log(players);
+    socket.username = username;
     socket.broadcast.emit('login', username);
   });
 
-  socket.on('message-global', (data) => {
-    console.log(data);
-    socket.broadcast.emit('message-global', data);
-  });
-
-  socket.on('message-ingame', (data) => {
+  socket.on('lobby-chat', (message) => {
+    var today = new Date();
+    var message = {
+      username: socket.username,
+      time: today.getHours() + ":" + today.getMinutes(),
+      message: message
+    };
+    messages.push(message);
+    socket.emit('lobby-chat', message);
+    socket.broadcast.emit('lobby-chat', message);
   });
 
   socket.on('disconnect', () => {

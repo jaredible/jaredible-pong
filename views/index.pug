@@ -12,28 +12,27 @@ html
       .modal-dialog.modal-dialog-centered
         .modal-content
           .modal-body
-            form#login.h-100.m-auto
+            #login.h-100.m-auto
               .input-group
                 input(id='username', class='form-control', type='text', placeholder='Username')
                 .input-group-append
-                  button.btn.btn-primary Login
+                  button#login-btn.btn.btn-primary Login
     .container-fluid.h-100.pt-3.pb-3.blur
       .row.h-100
         #chat.col-md-4
           h1.text-center.text-white Chat
-          - var n = 0
           ul.list-group.test
-            while n++ < 8
+            each message in messages
               li.list-group-item.align-items-start
                 .d-flex.w-100.justify-content-between
-                  h5.mb-1 Jaredible
-                  small.text-muted 3:14 PM, Today
-                p.mb-1 This is a sentence. This is another sentence. I hope this wraps.
-          form#test2
+                  h5.mb-1= message.username
+                  small.text-muted= message.time
+                p.mb-1= message.message
+          #chat-form
             .input-group
-              input(class='form-control', type='text', placeholder='Message')
+              input(id='chat-box', class='form-control', type='text', placeholder='Message')
               .input-group-append
-                button.btn.btn-success Send
+                button#chat-btn.btn.btn-success Send
         #players.col-md-4.text-white
           h1.text-center Players
           - var n = 0
@@ -62,4 +61,3 @@ html
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js', integrity='sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o', crossorigin='anonymous')
     script(src='/socket.io/socket.io.js')
     script(src='/js/main.js')
-    script(src='/js/pong.js')

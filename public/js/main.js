@@ -3,16 +3,12 @@ $(function() {
 
   $("#myModal").show();
 
-  var login = $("#login");
-
-  login.submit(function(e) {
-    e.preventDefault();
+  $("#login-btn").click(function() {
     socket.emit("login", $("#username").val());
     $("#username").val("");
     $("#myModal").hide();
     $(".testing").hide();
     $(".container-fluid").removeClass("blur");
-    return false;
   });
 
   $("ul").scrollTop($("ul").height());
@@ -20,22 +16,18 @@ $(function() {
   socket.on("login", function(username) {
     var item = $("#test");
     item.append($("<li>").append($("<div>").append($("<div>").addClass("form-control").text(username)).addClass("input-group")).addClass("list-group-item").addClass("p-0"));
-    console.log(data);
+    console.log(username);
   });
 
-  socket.on("message-global", function(data) {
-    $(".chat-messages").append($("<li>").text(data));
-    console.log(data);
+  socket.on("lobby-chat", function(data) {
+    $(".test").append($("<li>").append($("<div>").append($("<h5>").addClass("mb-1").text(data.username)).append($("<small>").addClass("text-muted").text(data.time)).addClass("d-flex").addClass("w-100").addClass("justify-content-between")).append($("<p>").addClass("mb-1").text(data.message)).addClass("list-group-item").addClass("align-items-start"));
+    console.log(data.username);
+    $("ul").scrollTop($("ul").height());
   });
 
-  socket.on("message-ingame", function(data) {
-  });
-
-  $(".chat-form").submit(function(e) {
-    e.preventDefault();
-    socket.emit("message-global", $(".message-box").val());
-    $(".message-box").val("");
-    return false;
+  $("#chat-btn").click(function() {
+    socket.emit("lobby-chat", $("#chat-box").val());
+    $("#chat-box").val("");
   });
 
   var login = $("#login-wrapper");
