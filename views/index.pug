@@ -16,7 +16,7 @@ html
           .modal-body
             #login.h-100.m-auto
               .input-group.input-group-lg
-                input(id='username', class='form-control', type='text', placeholder='', autofocus)
+                input(id='username', class='form-control', type='text', placeholder='', autocomplete='off', autofocus)
                 .input-group-append
                   button#login-btn.btn.btn-primary Login
     .container-fluid.h-100.pt-3.pb-3.animated.blur
@@ -33,7 +33,7 @@ html
                   p.mb-1= message.message
           #chat-form.animated
             .input-group
-              input(id='chat-box', class='form-control', type='text', placeholder='Message')
+              input(id='chat-box', class='form-control', type='text', placeholder='Message', autocomplete='off')
               .input-group-append
                 button#chat-btn.btn.btn-success Send
         #players.col-md-4.text-white
