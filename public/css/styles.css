@@ -94,6 +94,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem - 38px - 5px) !important;
   background-color: #3c6382;
+  box-shadow: 0 0 10px 0 #3c6382;
 }
 
 #wrapper2 {
@@ -101,6 +102,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem);
   background-color: #3c6382;
+  box-shadow: 0 0 10px 0 #3c6382;
 }
 
 #wrapper3 {
@@ -108,6 +110,7 @@ h1 {
   height: 100%;
   max-height: calc(100% - 48px - 15px - .5rem) !important;
   background-color: #3c6382;
+  box-shadow: 0 0 10px 0 #3c6382;
 }
 
 .list-group {
@@ -116,7 +119,6 @@ h1 {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  box-shadow: 0 0 10px 0 #3c6382;
 }
 
 .list-group::-webkit-scrollbar {
