@@ -4,6 +4,7 @@ $(function() {
   var i = 0;
   var text = "Username";
   var speed = 50;
+
   function test() {
     if (i < text.length) {
       $("#username").attr("placeholder", $("#username").attr("placeholder") + text.charAt(i++));
@@ -14,8 +15,16 @@ $(function() {
     test();
   }, 1000);
 
-  socket.on("player-disconnect", function(username) {
-    console.log(username + " disconnected");
+  socket.on("player-disconnect", function(player) {
+    console.log(player.username + " disconnected");
+    $.each(players, function(i, v) {
+      if (v.player.username === player.username) {
+        v.li.addClass("fadeOut").addClass("faster");
+        setTimeout(function() {
+          v.li.remove();
+        }, 500);
+      }
+    });
   });
 
   socket.on("disconnect", function() {
@@ -71,23 +80,18 @@ $(function() {
     }, 1000);
   });
 
-  socket.on("new-player", function(username) {
-    $("#test").append($("<li>").append($("<div>").append($("<div>").append($("<i>").addClass("fa").addClass("fa-circle").addClass("online")).addClass("status")).append($("<div>").addClass("form-control").text(username)).append($("<div>").append($("<button>").addClass("btn").addClass("btn-success").text("Invite")).addClass("input-group-append")).append($("<div>").append($("<button>").addClass("btn").addClass("btn-primary").text("Join")).addClass("input-group-append")).addClass("input-group")).addClass("list-group-item").addClass("p-0"));
+  socket.on("chat-global", function(messageObj) {
+    addMessage(messageObj);
   });
 
-  socket.on("lobby-chat", function(data) {
-    var item = $("<li>");
-    $(".test3").append(item.append($("<div>").append($("<h5>").addClass("mb-1").text(data.username)).append($("<small>").addClass("text-muted").text(data.time)).addClass("d-flex").addClass("w-100").addClass("justify-content-between")).append($("<p>").addClass("mb-1").text(data.message)).addClass("list-group-item").addClass("align-items-start").addClass("animated").addClass("fadeIn").addClass("faster"));
-    setTimeout(function() {
-      item.removeClass("fadeIn").removeClass("faster");
-    }, 1000);
-    $("ul").scrollTop($("ul").height()); // TODO
+  socket.on("login-new", function(playerObj) {
+    addPlayer(playerObj);
   });
 
   $("#chat-btn").click(function() {
     var message = $("#chat-box").val();
     if (message !== "") {
-      socket.emit("lobby-chat", $("#chat-box").val());
+      socket.emit("chat-global", $("#chat-box").val());
       $("#chat-box").val("");
       // $("#chat-box").focus();
     } else {
@@ -104,7 +108,7 @@ $(function() {
       e.preventDefault();
       var message = $("#chat-box").val();
       if (message !== "") {
-        socket.emit("lobby-chat", $("#chat-box").val());
+        socket.emit("chat-global", $("#chat-box").val());
         $("#chat-box").val("");
       } else {
         $("#chat-form").addClass("shake");
@@ -167,4 +171,104 @@ $(function() {
       }, 1000);
     }, 1000);
   });
+
+  socket.on("chat-init", function(messageObjs) {
+    messageObjs.forEach(function(messageObj) {
+      addMessage(messageObj);
+    });
+  });
+
+  socket.on("players-init", function(players) {
+    players.forEach(function(player) {
+      addPlayer(player);
+    });
+  });
 });
+
+var messages = [];
+var players = [];
+
+function addMessage(messageObj) {
+  var ul = $(".test3");
+  var li = $("<li>");
+  var div = $("<div>");
+  var h5 = $("<h5>");
+  var small = $("<small>");
+  var p = $("<p>");
+
+  li.addClass("list-group-item").addClass("align-items-start").addClass("animated").addClass("fadeIn").addClass("faster");
+  div.addClass("d-flex").addClass("w-100").addClass("justify-content-between");
+  h5.addClass("mb-1");
+  small.addClass("text-muted");
+  p.addClass("mb-1");
+
+  h5.text(messageObj.username);
+  small.text(messageObj.datetime);
+  p.text(messageObj.message);
+
+  ul.append(li.append(div.append(h5).append(small)).append(p));
+
+  setTimeout(function() {
+    li.removeClass("fadeIn").removeClass("faster");
+  }, 500);
+
+  ul.animate({
+    scrollTop: ul.prop("scrollHeight")
+  }, 500);
+
+  messages.push(li);
+  if (messages.length > 10) {
+    messages[0].remove();
+    messages.shift();
+  }
+}
+
+function addPlayer(player) {
+  var ul = $("#test");
+  var li = $("<li>");
+  var inputGroup = $("<div>");
+  var status = $("<div>");
+  var i = $("<i>");
+  var inputGroupJoin = $("<div>");
+  var buttonJoin = $("<button>");
+  var username = $("<div>");
+  var inputGroupInvite = $("<div>");
+  var buttonInvite = $("<button>");
+  var inputGroupSpectate = $("<div>");
+  var buttonSpectate = $("<button>");
+
+  li.addClass("list-group-item").addClass("p-0").addClass("animated").addClass("fadeIn").addClass("faster");
+  inputGroup.addClass("input-group");
+  status.addClass("status");
+  i.addClass("fa").addClass("fa-circle").addClass("online");
+  username.addClass("form-control").addClass("pl-0");
+  inputGroupJoin.addClass("input-group-append");
+  buttonJoin.addClass("btn").addClass("btn-primary");
+  inputGroupInvite.addClass("input-group-append");
+  buttonInvite.addClass("btn").addClass("btn-success");
+  inputGroupSpectate.addClass("input-group-append");
+  buttonSpectate.addClass("btn").addClass("btn-info");
+
+  username.text(player.username);
+  buttonJoin.text("Join");
+  buttonInvite.text("Invite");
+  buttonSpectate.text("Spectate");
+
+  ul.append(li.append(inputGroup.append(status.append(i)).append(username).append(inputGroupJoin.append(buttonJoin)).append(inputGroupInvite.append(buttonInvite)).append(inputGroupSpectate.append(buttonSpectate))));
+
+  setTimeout(function() {
+    li.removeClass("fadeIn").removeClass("faster");
+  }, 500);
+
+  // TODO?
+  ul.animate({
+    scrollTop: 0
+  }, 500);
+
+  var playerObj = {
+    player: player,
+    li: li
+  };
+
+  players.push(playerObj);
+}

@@ -19,10 +19,7 @@ var messages = [];
 var games = [];
 
 app.get('/', (req, res) => {
-  res.render('index', {
-    messages: messages,
-    players: players
-  });
+  res.render('index');
 });
 
 app.get('/lobby', (req, res) => {
@@ -41,18 +38,22 @@ io.on('connection', (socket) => {
   console.log('Connection established...', socket.id);
   connections.push(socket);
 
+  socket.emit('chat-init', messages);
+  socket.emit('players-init', players);
+
   socket.on('login', (username) => {
-    socket.username = username;
     var player = {
       id: socket.id,
       username: username
     };
     players.push(player);
-    socket.emit('login', username);
-    socket.broadcast.emit('new-player', username);
+    socket.player = player;
+
+    socket.emit('login', player);
+    socket.broadcast.emit('login-new', player);
   });
 
-  socket.on('lobby-chat', (message) => {
+  socket.on('chat-global', (message) => {
     var today = new Date();
     var month = today.getMonth() + 1;
     var day = today.getDate();
@@ -61,20 +62,27 @@ io.on('connection', (socket) => {
     var hourFormatted = hour % 12 || 12;
     var minuteFormatted = minute < 10 ? '0' + minute : minute;
     var morning = hour < 12 ? 'AM' : 'PM';
-    var message = {
-      username: socket.username,
-      time: hourFormatted + ':' + minuteFormatted + ' ' + morning + ' ' + month + '/' + day,
+
+    var messageObj = {
+      id: messages.length,
+      username: socket.player.username,
+      datetime: month + '/' + day + ' ' + hourFormatted + ':' + minuteFormatted + ' ' + morning,
       message: message
     };
-    messages.push(message);
-    socket.emit('lobby-chat', message);
-    socket.broadcast.emit('lobby-chat', message);
+
+    messages.push(messageObj);
+    if (messages.length > 10) {
+      messages.shift();
+    }
+
+    io.sockets.emit('chat-global', messageObj);
   });
 
   socket.on('disconnect', () => {
     console.log('Connection closed...', socket.id);
     connections.splice(connections.indexOf(socket), 1);
-    socket.broadcast.emit('player-disconnect', socket.username);
+    players.splice(players.indexOf(socket.player), 1);
+    socket.broadcast.emit('player-disconnect', socket.player);
   });
 });
 

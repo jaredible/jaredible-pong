@@ -25,32 +25,17 @@ html
           h1.text-center.text-white.animated#title1 Chat
           #wrapper1.animated
             ul.list-group.test3
-              each message in messages
-                li.list-group-item.align-items-start.animated
-                  .d-flex.w-100.justify-content-between
-                    h5.mb-1= message.username
-                    small.text-muted= message.time
-                  p.mb-1= message.message
           #chat-form.animated
             .input-group
               input(id='chat-box', class='form-control', type='text', placeholder='Message', autocomplete='off')
               .input-group-append
                 button#chat-btn.btn.btn-success Send
+        .col-md-4
         #players.col-md-4.text-white
           h1.text-center.text-white.animated#title2 Players
           #wrapper2.animated
             ul.list-group#test
-              each player in players
-                li.list-group-item.p-0
-                  .input-group
-                    .status
-                      i.fa.fa-circle.online
-                    .form-control.pl-0= player.username
-                    .input-group-append
-                      button.btn.btn-success Invite
-                    .input-group-append
-                      button.btn.btn-primary Join
-        #games.col-md-4.text-white.animated
+        //- #games.col-md-4.text-white.animated
           h1.text-center.text-white.animated#title3 Games
           - var n = 0
           #wrapper3.animated
