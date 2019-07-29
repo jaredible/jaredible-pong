@@ -212,10 +212,6 @@ function addMessage(messageObj) {
     li.removeClass("fadeIn").removeClass("faster");
   }, 500);
 
-  ul.animate({
-    scrollTop: ul.prop("scrollHeight")
-  }, 500);
-
   messages.push(li);
   if (messages.length > 10) {
     messages[0].remove();
@@ -258,11 +254,6 @@ function addPlayer(player) {
 
   setTimeout(function() {
     li.removeClass("fadeIn").removeClass("faster");
-  }, 500);
-
-  // TODO?
-  ul.animate({
-    scrollTop: 0
   }, 500);
 
   var playerObj = {
