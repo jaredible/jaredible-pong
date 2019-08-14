@@ -1,274 +1,117 @@
-$(function() {
-  var socket = io.connect();
+"use strict";
 
-  var i = 0;
-  var text = "Username";
-  var speed = 50;
+$(".test1").hide();
 
-  function test() {
-    if (i < text.length) {
-      $("#username").attr("placeholder", $("#username").attr("placeholder") + text.charAt(i++));
-      setTimeout(test, speed);
-    }
-  }
-  setTimeout(function() {
-    test();
-  }, 1000);
+// message: sender, datetime, body
+// player: id, username, room
+// room: name, players, game
+// game: player1, player2, paddle1, paddle2, ball
+// paddle: owner, y-position
 
-  socket.on("player-disconnect", function(player) {
-    console.log(player.username + " disconnected");
-    $.each(players, function(i, v) {
-      if (v.player.username === player.username) {
-        v.li.addClass("fadeOut").addClass("faster");
-        setTimeout(function() {
-          v.li.remove();
-        }, 500);
-      }
-    });
-  });
+// players can only control their paddles, so server must handle this, player must know which paddle is theirs
 
-  socket.on("disconnect", function() {
-    $("#myModal").show();
-    $(".testing").show();
-    $(".container-fluid").addClass("blur");
-  });
+var socket = null;
+var thePlayer = null;
+var onlinePlayerListItems = new Map();
 
-  $("#myModal").show();
+var loginModal = $("#modal-login");
+var loginButton = $("#btn-login");
+var loginInput = $("#input-login");
 
-  $("#login-btn").click(function() {
-    var username = $("#username").val();
-    if (username !== "") {
-      socket.emit("login", $("#username").val());
-      // $("#username").val("");
-    } else {
-      $("#myModal").removeClass("bounceInDown").addClass("shake");
-      setTimeout(function() {
-        $("#myModal").removeClass("shake");
-      }, 1000);
-    }
-  });
+var playerList = $("#list-players");
 
-  $("#username").on("keypress", function(e) {
-    if (e.which == 13) {
-      e.preventDefault();
-      var username = $("#username").val();
-      if (username !== "") {
-        socket.emit("login", $("#username").val());
-        // $("#username").val("");
-      } else {
-        $("#myModal").removeClass("bounceInDown").addClass("shake");
-        setTimeout(function() {
-          $("#myModal").removeClass("shake");
-        }, 1000);
-      }
-    }
-  });
-
-  $("ul").scrollTop($("ul").height());
-
-  socket.on("login", function(username) {
-    $(".testing").addClass("fadeOut");
-    $(".container-fluid").addClass("blur-test");
-    $("#myModal").removeClass("bounceInDown").addClass("bounceOutDown");
-    setTimeout(function() {
-      $("#username").val("");
-      $("#myModal").hide();
-      $("#myModal").removeClass("bounceOutDown");
-      $(".testing").hide();
-      $(".testing").removeClass("fadeOut");
-      $(".container-fluid").removeClass("blur");
-    }, 1000);
-  });
-
-  socket.on("chat-global", function(messageObj) {
-    addMessage(messageObj);
-  });
-
-  socket.on("login-new", function(playerObj) {
-    addPlayer(playerObj);
-  });
-
-  $("#chat-btn").click(function() {
-    var message = $("#chat-box").val();
-    if (message !== "") {
-      socket.emit("chat-global", $("#chat-box").val());
-      $("#chat-box").val("");
-      // $("#chat-box").focus();
-    } else {
-      $("#chat-box").focus();
-      $("#chat-form").addClass("shake");
-      setTimeout(function() {
-        $("#chat-form").removeClass("shake");
-      }, 1000);
-    }
-  });
-
-  $("#chat-box").on("keypress", function(e) {
-    if (e.which == 13) {
-      e.preventDefault();
-      var message = $("#chat-box").val();
-      if (message !== "") {
-        socket.emit("chat-global", $("#chat-box").val());
-        $("#chat-box").val("");
-      } else {
-        $("#chat-form").addClass("shake");
-        setTimeout(function() {
-          $("#chat-form").removeClass("shake");
-        }, 1000);
-      }
-    }
-  });
-
-  $(".thetest").click(function() {
-    var chat = $("#wrapper1");
-    var players = $("#wrapper2");
-    var games = $("#wrapper3");
-    games.addClass("zoomOutRight").addClass("faster");
-    chat.addClass("zoomOutLeft").addClass("faster");
-    players.addClass("zoomOut").addClass("faster");
-    $("#title1").addClass("zoomOutUp").addClass("faster");
-    $("#title2").addClass("zoomOutUp").addClass("faster");
-    $("#title3").addClass("zoomOutUp").addClass("faster");
-    $("#chat-form").addClass("zoomOutDown").addClass("faster");
-    setTimeout(function() {
-      $("#games").removeClass("col-md-4").addClass("col-md-3");
-      games.removeClass("zoomOutRight").addClass("zoomInRight");
-      setTimeout(function() {
-        games.removeClass("zoomInRight").removeClass("faster");
-      }, 1000);
-      $("#chat").removeClass("col-md-4").addClass("col-md-3");
-      chat.removeClass("zoomOutLeft").addClass("zoomInLeft");
-      setTimeout(function() {
-        chat.removeClass("zoomInLeft").removeClass("faster");
-      }, 1000);
-      $("#players").removeClass("col-md-4").addClass("col-md-3");
-      players.removeClass("zoomOut").addClass("zoomIn");
-      setTimeout(function() {
-        players.removeClass("zoomIn").removeClass("faster");
-      }, 1000);
-      $("#chat-form").removeClass("zoomOutDown").addClass("zoomInDown");
-      setTimeout(function() {
-        $("#chat-form").removeClass("zoomInDown").removeClass("faster");
-      }, 1000);
-      $("#players").removeClass("col-md-4").addClass("col-md-6");
-      $("#wrapper2").html("");
-
-      // titles
-      $("#title1").removeClass("zoomOutUp").addClass("zoomInUp");
-      setTimeout(function() {
-        $("#title1").removeClass("zoomInUp").removeClass("faster");
-      }, 1000);
-      $("#title2").removeClass("zoomOutUp").addClass("zoomInUp");
-      $("#title2").text("Game");
-      setTimeout(function() {
-        $("#title2").removeClass("zoomInUp").removeClass("faster");
-      }, 1000);
-      $("#title3").removeClass("zoomOutUp").addClass("zoomInUp");
-      $("#title3").text("Perks");
-      $("#wrapper3").html("");
-      setTimeout(function() {
-        $("#title3").removeClass("zoomInUp").removeClass("faster");
-      }, 1000);
-    }, 1000);
-  });
-
-  socket.on("chat-init", function(messageObjs) {
-    messageObjs.forEach(function(messageObj) {
-      addMessage(messageObj);
-    });
-  });
-
-  socket.on("players-init", function(players) {
-    players.forEach(function(player) {
-      addPlayer(player);
-    });
-  });
-});
-
-var messages = [];
-var players = [];
-
-function addMessage(messageObj) {
-  var ul = $(".test3");
-  var li = $("<li>");
-  var div = $("<div>");
-  var h5 = $("<h5>");
-  var small = $("<small>");
-  var p = $("<p>");
-
-  li.addClass("list-group-item").addClass("align-items-start").addClass("animated").addClass("fadeIn").addClass("faster");
-  div.addClass("d-flex").addClass("w-100").addClass("justify-content-between");
-  h5.addClass("mb-1");
-  small.addClass("text-muted");
-  p.addClass("mb-1");
-
-  h5.text(messageObj.username);
-  small.text(messageObj.datetime);
-  p.text(messageObj.message);
-
-  ul.append(li.append(div.append(h5).append(small)).append(p));
-
-  setTimeout(function() {
-    li.removeClass("fadeIn").removeClass("faster");
-  }, 500);
-
-  ul.animate({
-    scrollTop: ul.prop("scrollHeight")
-  }, 500);
-
-  messages.push(li);
-  if (messages.length > 10) {
-    messages[0].remove();
-    messages.shift();
+function sendLoginWithUsername(username) {
+  if (socket) {
+    socket.emit("login", username);
   }
 }
 
-function addPlayer(player) {
-  var ul = $("#test");
+function addLobbyMessage(message) {
+}
+
+function addPlayerToLobby(newPlayer) {
   var li = $("<li>");
-  var inputGroup = $("<div>");
-  var status = $("<div>");
-  var i = $("<i>");
-  var inputGroupJoin = $("<div>");
-  var buttonJoin = $("<button>");
-  var username = $("<div>");
-  var inputGroupInvite = $("<div>");
-  var buttonInvite = $("<button>");
-  var inputGroupSpectate = $("<div>");
-  var buttonSpectate = $("<button>");
 
-  li.addClass("list-group-item").addClass("p-0").addClass("animated").addClass("fadeIn").addClass("faster");
-  inputGroup.addClass("input-group");
-  status.addClass("status");
-  i.addClass("fa").addClass("fa-circle").addClass("online");
-  username.addClass("form-control").addClass("pl-0");
-  inputGroupJoin.addClass("input-group-append");
-  buttonJoin.addClass("btn").addClass("btn-primary");
-  inputGroupInvite.addClass("input-group-append");
-  buttonInvite.addClass("btn").addClass("btn-success");
-  inputGroupSpectate.addClass("input-group-append");
-  buttonSpectate.addClass("btn").addClass("btn-info");
+  newPlayer.listItem = li;
+  this.onlinePlayers[newPlayer.username] = newPlayer;
+  refreshPlayerUIList();
+}
 
-  username.text(player.username);
-  buttonJoin.text("Join");
-  buttonInvite.text("Invite");
-  buttonSpectate.text("Spectate");
+function refreshPlayerUIList() {
+}
 
-  ul.append(li.append(inputGroup.append(status.append(i)).append(username).append(inputGroupJoin.append(buttonJoin)).append(inputGroupInvite.append(buttonInvite)).append(inputGroupSpectate.append(buttonSpectate))));
+loginButton.click(function() {
+  sendLoginWithUsername(loginInput.val());
+});
 
-  setTimeout(function() {
-    li.removeClass("fadeIn").removeClass("faster");
-  }, 500);
+loginInput.on("keypress", function(e) {
+  if (e.which === 13) {
+    sendLoginWithUsername(loginInput.val());
+  }
+});
 
-  // TODO?
-  ul.animate({
-    scrollTop: 0
-  }, 500);
+$(function() {
+  socket = io.connect();
 
-  var playerObj = {
-    player: player,
-    li: li
-  };
+  socket.on("loggedOn", function(id, username) {
+    thePlayer = new Player(id, username);
 
-  players.push(playerObj);
+    // testing
+    socket.emit("joinRoom", "room-test");
+    $(".test2").hide();
+    $(".test1").show();
+  });
+
+  socket.on("newPlayer", function(id, username) {
+    let newPlayer = new Player(id, username);
+    addPlayerToLobby(newPlayer);
+  });
+
+  socket.on("loginError", function() {
+  });
+});
+
+class Player {
+  constructor(id, username) {
+    this.id = id;
+    this.username = username;
+  }
+
+  destroy() {
+    this.id = null;
+    this.username = null;
+  }
+}
+
+class Game {
+  constructor(canvas) {
+    this.canvas = canvas;
+
+    this.context = canvas.getContext("2d");
+    this.paddle1 = null;
+    this.paddle2 = null;
+    this.ball = null;
+  }
+
+  draw(dt) {
+    this.paddle1.draw(dt);
+    this.paddle2.draw(dt);
+    this.ball.draw(dt);
+  }
+}
+
+class Paddle {
+  constructor() {
+  }
+
+  draw(dt) {
+  }
+}
+
+class Ball {
+  constructor() {
+  }
+
+  draw(dt) {
+  }
 }

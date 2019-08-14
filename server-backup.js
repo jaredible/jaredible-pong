@@ -1,56 +1,37 @@
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-const PORT = process.env.port || 3000;
-const ENV = app.get('env');
-
-app.set('view engine', 'pug');
-app.use(express.static('public'));
-app.use('/socket.io', express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
-
 var connections = [];
+var sockets = {};
 var players = [];
 var messages = [];
-var games = [];
-
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
-app.get('/lobby', (req, res) => {
-  res.render('lobby');
-});
-
-app.get('/game', (req, res) => {
-  res.render('game');
-});
-
-app.get('/login', (req, res) => {
-  res.render('login');
-});
 
 io.on('connection', (socket) => {
-  console.log('Connection established...', socket.id);
+  console.log('A user connected!', socket.id);
   connections.push(socket);
 
   socket.emit('chat-init', messages);
   socket.emit('players-init', players);
 
   socket.on('login', (username) => {
-    var player = {
-      id: socket.id,
-      username: username
-    };
-    players.push(player);
-    socket.player = player;
+    if (util.findIndex(players, username) > -1) {
+      socket.emit('login-error', 'Username taken!');
+    } else if (!util.validUsername(username)) {
+      socket.emit('login-error', 'Invalid username!');
+    } else {
+      var player = {
+        id: socket.id,
+        username: username
+      };
+      players.push(player);
+      socket.player = player;
 
-    socket.emit('login', player);
-    socket.broadcast.emit('login-new', player);
+      socket.emit('login', player);
+      socket.broadcast.emit('login-new', player);
+    }
   });
 
   socket.on('chat-global', (message) => {
@@ -75,7 +56,11 @@ io.on('connection', (socket) => {
       messages.shift();
     }
 
-    io.sockets.emit('chat-global', messageObj);
+    io.emit('chat-global', messageObj); // TODO io.emit()
+  });
+
+  socket.on('test-join', (player) => {
+    console.log(socket.player.username + ' wants to join ' + player.username);
   });
 
   socket.on('disconnect', () => {
@@ -86,6 +71,9 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`${ENV.charAt(0).toUpperCase() + ENV.substring(1)} server listening at http://localhost:${server.address().port}`);
+const HOST = process.env.HOST || config.server.host;
+const PORT = process.env.PORT || config.server.port;
+const ENV = app.get('env');
+server.listen(PORT, HOST, () => {
+  console.log(`[DEBUG] ${ENV.charAt(0).toUpperCase() + ENV.substring(1)} game server listening on http://${server.address().address}:${server.address().port}`);
 });

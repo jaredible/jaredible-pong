@@ -338,7 +338,7 @@ $(function() {
     },
 
     listen: function() {
-      document.addEventListener('keydown', function(key) {
+      document.getElementById("canvas").addEventListener('keydown', function(key) {
         // Handle the 'Press any key to begin' function and start the game
         if (Pong.running === false) {
           Pong.running = true;
@@ -353,7 +353,7 @@ $(function() {
       });
 
       // Stop the player from moving when there are no keys being pressed
-      document.addEventListener('keyup', function(key) {
+      document.getElementById("canvas").addEventListener('keyup', function(key) {
         Pong.player.move = DIRECTION.IDLE;
       });
     },
