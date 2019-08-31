@@ -5,8 +5,8 @@ var renderStats = new Stats("FPS");
 
 canvas.blur();
 
-document.body.appendChild(updateStats.domElement);
-document.body.appendChild(renderStats.domElement);
+//document.body.appendChild(updateStats.domElement);
+//document.body.appendChild(renderStats.domElement);
 
 var Keyboard = {
   _pressed: {},
@@ -131,38 +131,32 @@ Game.draw = function(interp) {
 };
 
 Game.run = (function() {
+  var now, dt = 0,
+    last = Timer.getTime(),
+    step = 1 / Timer.ticksPerSecond;
+  var lastTimer = Timer.getTime();
   var updates = 0;
   var frames = 0;
-  var skipTicks = 1000 / Timer.ticksPerSecond;
-  var nextGameTick = Timer.getTime();
-  var lastTimer = Timer.getTime();
+  var elapsedPartialTicks = 0;
+  var renderPartialTicks = 0;
+  var gltest = true;
 
   return function() {
     Game.paused = document.activeElement !== canvas;
 
-    //if (this.paused) {
-    //  var prev = Timer.renderPartialTicks;
-    //  this.timer.update();
-    //  Timer.renderPartialTicks = prev;
-    //} else Timer.update();
-
-    //for (var i = 0; i < Timer.elapsedTicks; i++) {
-      //console.log("update");
-      //nextGameTick += skipTicks;
-      //if (!Game.paused) Game.update();
-      //updateStats.update();
-      //updates++;
-    //}
-
-    while (Timer.getTime() >= nextGameTick) {
-      nextGameTick += skipTicks;
+    now = Timer.getTime();
+    dt += Math.min(1, (now - last) / 1000);
+    last = now;
+    while (dt > step) {
+      dt -= step;
       if (!Game.paused) Game.update();
       updateStats.update();
       updates++;
+      elapsedPartialTicks = Timer.getTime();
     }
+    renderPartialTicks = (Timer.getTime() - elapsedPartialTicks - (1000 / Timer.ticksPerSecond)) / (1000 / Timer.ticksPerSecond);
 
-    //if (!Game.paused) Game.draw(Timer.renderPartialTicks);
-    //if (!Game.paused) Game.draw((Timer.getTime() - nextGameTick) / skipTicks);
+    if (!Game.paused) Game.draw(renderPartialTicks);
     renderStats.update();
     frames++;
 

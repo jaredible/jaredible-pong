@@ -216,7 +216,7 @@ Rect.prototype.draw3 = function(context, interpolation) {
 };
 
 var Game = {
-  fps: 2,
+  fps: 20,
   paused: false,
   getTime: function() {
     return window.performance.now();
@@ -376,7 +376,7 @@ Game.run = (function() {
 
     renderStats.update();
     frames++;
-    if (!Game.paused) Game.draw((Game.getTime() - nextGameTick) / skipTicks);
+    //if (!Game.paused) Game.draw((Game.getTime() - nextGameTick) / skipTicks);
 
     if (Game.getTime() - lastTimer > 1000) {
       lastTimer += 1000;
