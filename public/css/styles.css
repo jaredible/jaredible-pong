@@ -81,7 +81,7 @@ h1 {
   filter: blur(2px);
 }
 
-.overlay {
+#overlay {
   display: block;
   position: fixed;
   width: 100%;
@@ -172,7 +172,7 @@ h1 {
 .login-form {
 }
 
-#chat-form {
+#form-chat {
   position: absolute;
   width: 100%;
   padding-left: 15px;
@@ -336,7 +336,7 @@ canvas:not(:focus) {
 .chat-message {
 }
 
-.chat-form {
+.form-chat {
 }
 
 .message-box {
